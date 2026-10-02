@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - AgriTech Portal</title>
+  <meta name="description" content="AgriTech real-time agricultural analytics and crop batch management overview.">
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Custom AgriTech Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Container (Injected by common.js) -->
+    <div id="app-sidebar-container"></div>
+
+    <!-- Main Content -->
+    <div class="app-main">
+      <!-- Top Navbar (Injected by common.js) -->
+      <div id="app-topbar-container"></div>
+
+      <!-- Page Content -->
+      <main class="page-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Agricultural Analytics & Operations</h1>
+            <p class="page-subtitle">Real-time overview of farmers, field plots, crop batches, and harvest yields</p>
+          </div>
+          <div class="d-flex gap-2">
+            <a href="batches.html" class="btn btn-agri-primary" data-role="admin">
+              <i class="fas fa-plus-circle"></i>New Batch
+            </a>
+            <a href="activities.html" class="btn btn-agri-outline">
+              <i class="fas fa-clipboard-check"></i>Log Activity
+            </a>
+          </div>
+        </div>
+
+        <!-- 6 KPI Metric Cards -->
+        <div class="kpi-grid">
+          <!-- Total Farmers -->
+          <div class="stat-card" style="--card-accent: #16a34a; --icon-bg: #dcfce7; --icon-color: #16a34a;">
+            <div class="stat-header">
+              <span class="stat-label">Total Farmers</span>
+              <div class="stat-icon"><i class="fas fa-users"></i></div>
+            </div>
+            <div class="stat-value" id="kpiFarmers">--</div>
+            <div class="stat-sub"><i class="fas fa-check text-success"></i>Registered cultivators</div>
+          </div>
+
+          <!-- Total Fields -->
+          <div class="stat-card" style="--card-accent: #0284c7; --icon-bg: #e0f2fe; --icon-color: #0284c7;">
+            <div class="stat-header">
+              <span class="stat-label">Total Fields</span>
+              <div class="stat-icon"><i class="fas fa-map-marked-alt"></i></div>
+            </div>
+            <div class="stat-value" id="kpiFields">--</div>
+            <div class="stat-sub"><i class="fas fa-vector-square text-info"></i>Across all agricultural zones</div>
+          </div>
+
+          <!-- Active Batches -->
+          <div class="stat-card" style="--card-accent: #eab308; --icon-bg: #fef9c3; --icon-color: #ca8a04;">
+            <div class="stat-header">
+              <span class="stat-label">Active Batches</span>
+              <div class="stat-icon"><i class="fas fa-spinner"></i></div>
+            </div>
+            <div class="stat-value" id="kpiActiveBatches">--</div>
+            <div class="stat-sub"><i class="fas fa-seedling text-warning"></i>In planting & growing stages</div>
+          </div>
+
+          <!-- Completed Batches -->
+          <div class="stat-card" style="--card-accent: #059669; --icon-bg: #d1fae5; --icon-color: #059669;">
+            <div class="stat-header">
+              <span class="stat-label">Completed Batches</span>
+              <div class="stat-icon"><i class="fas fa-check-double"></i></div>
+            </div>
+            <div class="stat-value" id="kpiCompletedBatches">--</div>
+            <div class="stat-sub"><i class="fas fa-warehouse text-success"></i>Successfully harvested</div>
+          </div>
+
+          <!-- Total Production -->
+          <div class="stat-card" style="--card-accent: #8b5cf6; --icon-bg: #ede9fe; --icon-color: #7c3aed;">
+            <div class="stat-header">
+              <span class="stat-label">Total Production</span>
+              <div class="stat-icon"><i class="fas fa-balance-scale"></i></div>
+            </div>
+            <div class="stat-value" id="kpiProduction">--</div>
+            <div class="stat-sub"><i class="fas fa-weight-hanging text-secondary"></i>Quintals / crates produced</div>
+          </div>
+
+          <!-- Average Yield -->
+          <div class="stat-card" style="--card-accent: #ea580c; --icon-bg: #ffedd5; --icon-color: #ea580c;">
+            <div class="stat-header">
+              <span class="stat-label">Average Yield</span>
+              <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+            </div>
+            <div class="stat-value" id="kpiAvgYield">--</div>
+            <div class="stat-sub"><i class="fas fa-arrow-up text-danger"></i>Yield per harvested batch</div>
+          </div>
+        </div>
+
+        <!-- 4 Analytics Charts in Responsive Grid -->
+        <div class="charts-grid">
+          <!-- 1. Crop Production Chart -->
+          <div class="agri-card">
+            <div class="agri-card-header">
+              <h2 class="agri-card-title"><i class="fas fa-chart-bar"></i>Production by Crop</h2>
+              <span class="badge bg-light text-muted border">Harvest Output</span>
+            </div>
+            <div class="agri-card-body">
+              <div class="chart-wrapper">
+                <canvas id="cropProductionChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Batch Status Chart -->
+          <div class="agri-card">
+            <div class="agri-card-header">
+              <h2 class="agri-card-title"><i class="fas fa-chart-pie"></i>Batch Status Distribution</h2>
+              <span class="badge bg-light text-muted border">Current Lifecycle</span>
+            </div>
+            <div class="agri-card-body">
+              <div class="chart-wrapper">
+                <canvas id="batchStatusChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Yield Trend Chart -->
+          <div class="agri-card">
+            <div class="agri-card-header">
+              <h2 class="agri-card-title"><i class="fas fa-chart-line"></i>Yield Trend Over Time</h2>
+              <span class="badge bg-light text-muted border">Historical Batches</span>
+            </div>
+            <div class="agri-card-body">
+              <div class="chart-wrapper">
+                <canvas id="yieldTrendChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Resource Utilization Chart -->
+          <div class="agri-card">
+            <div class="agri-card-header">
+              <h2 class="agri-card-title"><i class="fas fa-hand-holding-water"></i>Resource & Activity Usage</h2>
+              <span class="badge bg-light text-muted border">Cultivation Inputs</span>
+            </div>
+            <div class="agri-card-body">
+              <div class="chart-wrapper">
+                <canvas id="resourceUtilChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two-column Section: Active Crop Batches & Recent Cultivation Activities -->
+        <div class="row g-4">
+          <!-- Active Batches Table -->
+          <div class="col-lg-7">
+            <div class="agri-card h-100">
+              <div class="agri-card-header">
+                <h2 class="agri-card-title"><i class="fas fa-layer-group"></i>Active Crop Batches</h2>
+                <a href="batches.html" class="btn btn-sm btn-agri-outline">View All Batches</a>
+              </div>
+              <div class="agri-card-body p-0">
+                <div class="table-responsive-custom">
+                  <table class="table-custom">
+                    <thead>
+                      <tr>
+                        <th>Batch Code</th>
+                        <th>Crop</th>
+                        <th>Field / Farmer</th>
+                        <th>Status</th>
+                        <th>Harvest Date</th>
+                      </tr>
+                    </thead>
+                    <tbody id="activeBatchesTableBody">
+                      <tr><td colspan="5" class="text-center py-4 text-muted">Loading active batches...</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Cultivation Activities Feed -->
+          <div class="col-lg-5">
+            <div class="agri-card h-100">
+              <div class="agri-card-header">
+                <h2 class="agri-card-title"><i class="fas fa-clipboard-list"></i>Recent Activities</h2>
+                <a href="activities.html" class="btn btn-sm btn-agri-outline">All Activities</a>
+              </div>
+              <div class="agri-card-body">
+                <div id="recentActivitiesList" class="d-flex flex-direction-column gap-3">
+                  <p class="text-muted text-center py-3">Loading recent activities...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

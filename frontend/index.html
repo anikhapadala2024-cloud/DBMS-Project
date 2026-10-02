@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriTech - Crop Batch Management & Analytics Portal</title>
+  <meta http-equiv="refresh" content="0; url=login.html">
+  <script>
+    if (localStorage.getItem("agritech_token")) {
+      window.location.href = "dashboard.html";
+    } else {
+      window.location.href = "login.html";
+    }
+  </script>
+</head>
+<body style="font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; background: #f4f7f4; margin: 0;">
+  <div style="text-align: center;">
+    <h2 style="color: #145523;">🌱 AgriTech Portal</h2>
+    <p style="color: #64748b;">Redirecting to portal...</p>
+  </div>
+</body>
+</html>

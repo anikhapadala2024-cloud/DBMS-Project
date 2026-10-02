@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "🌱 AgriTech: Run Portal (Flask & MySQL)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_app.py",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "python": "C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+        },
+        {
+            "name": "🌐 Open AgriTech in Chrome Browser",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:5000/login.html",
+            "webRoot": "${workspaceFolder}/frontend"
+        },
+        {
+            "name": "🧪 Run Automated Verification Tests",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/verify_portal.py",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "python": "C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+        },
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "python": "C:\\Users\\HP\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        }
+    ]
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - AgriTech Crop Batch Management & Analytics Portal</title>
+  <meta name="description" content="Secure authentication portal for AgriTech Crop Batch Management and Agricultural Analytics.">
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Custom AgriTech Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-body">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="login-logo">
+        <i class="fas fa-leaf"></i>
+      </div>
+      <h1 class="h3 fw-bold text-success mb-1">AgriTech Portal</h1>
+      <p class="text-muted small mb-0">Crop Batch Management & Analytics System</p>
+    </div>
+
+    <!-- Alert Message Area -->
+    <div id="loginAlert" class="alert alert-danger d-none py-2 px-3 small" role="alert"></div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="mb-3">
+        <label for="email" class="form-label small fw-bold text-secondary">Email Address</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+          <input type="email" class="form-control border-start-0 ps-0" id="email" placeholder="name@domain.com" required autocomplete="email">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label small fw-bold text-secondary">Password</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light border-end-0"><i class="fas fa-lock text-muted"></i></span>
+          <input type="password" class="form-control border-start-0 ps-0" id="password" placeholder="••••••••" required autocomplete="current-password">
+          <button class="btn btn-outline-secondary border-start-0" type="button" onclick="togglePasswordVisibility()">
+            <i class="fas fa-eye" id="togglePasswordIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+          <label class="form-check-label small text-muted" for="rememberMe">Remember me</label>
+        </div>
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 small">
+          <i class="fas fa-shield-alt me-1"></i>JWT Protected
+        </span>
+      </div>
+
+      <button type="submit" class="btn btn-agri-primary w-100 justify-content-center py-2 fs-6" id="loginBtn">
+        <i class="fas fa-sign-in-alt me-2"></i>Sign In to Dashboard
+      </button>
+    </form>
+
+    <form id="registerForm" class="d-none" onsubmit="handleRegister(event)">
+      <div class="mb-3">
+        <label for="registerName" class="form-label small fw-bold text-secondary">Full Name</label>
+        <input type="text" class="form-control" id="registerName" placeholder="Your full name" required autocomplete="name" maxlength="100">
+      </div>
+      <div class="mb-3">
+        <label for="registerEmail" class="form-label small fw-bold text-secondary">Email Address</label>
+        <input type="email" class="form-control" id="registerEmail" placeholder="name@domain.com" required autocomplete="email" maxlength="150">
+      </div>
+      <div class="mb-3">
+        <label for="registerPassword" class="form-label small fw-bold text-secondary">Password</label>
+        <input type="password" class="form-control" id="registerPassword" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password">
+      </div>
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label small fw-bold text-secondary">Confirm Password</label>
+        <input type="password" class="form-control" id="confirmPassword" placeholder="Enter your password again" required minlength="6" autocomplete="new-password">
+      </div>
+      <div class="mb-3">
+        <label for="registerRole" class="form-label small fw-bold text-secondary">Account Type</label>
+        <select class="form-select" id="registerRole">
+          <option value="farmer" selected>Farmer account</option>
+          <option value="admin">Admin account</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-agri-primary w-100 justify-content-center py-2 fs-6" id="registerBtn">
+        <i class="fas fa-user-plus me-2"></i>Create Farmer Account
+      </button>
+    </form>
+
+    <div class="text-center mt-3">
+      <button type="button" class="btn btn-link btn-sm text-success text-decoration-none" id="authModeToggle" onclick="toggleAuthMode()">
+        Need an account? Create one
+      </button>
+    </div>
+
+    <!-- Quick Demo Accounts for College Viva / Testing -->
+    <div class="demo-credentials-box">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <span class="small fw-bold text-success"><i class="fas fa-key me-1"></i>One-Click Demo Fill:</span>
+      </div>
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-sm btn-outline-success flex-fill" onclick="fillCredentials('admin@agritech.com', 'Admin@123')">
+          <i class="fas fa-user-shield me-1"></i>Admin
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-primary flex-fill" onclick="fillCredentials('farmer.ramesh@agritech.com', 'Farmer@123')">
+          <i class="fas fa-tractor me-1"></i>Farmer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

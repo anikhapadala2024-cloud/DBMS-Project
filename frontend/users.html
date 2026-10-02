@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management - AgriTech Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <div id="app-sidebar-container"></div>
+    <div class="app-main">
+      <div id="app-topbar-container"></div>
+
+      <main class="page-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">User Accounts & Access Control</h1>
+            <p class="page-subtitle">Admin governance for system operators, agricultural officers, and farmer accounts</p>
+          </div>
+          <div>
+            <button class="btn btn-agri-primary" onclick="openAddUserModal()">
+              <i class="fas fa-user-plus me-1"></i>Create New User
+            </button>
+          </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="agri-card">
+          <div class="agri-card-header">
+            <h2 class="agri-card-title"><i class="fas fa-users-cog"></i>Registered System Users</h2>
+            <span class="badge bg-success-subtle text-success border border-success-subtle">Role-Based Access Control</span>
+          </div>
+          <div class="agri-card-body p-0">
+            <div class="table-responsive-custom">
+              <table class="table-custom">
+                <thead>
+                  <tr>
+                    <th># ID</th>
+                    <th>User Name</th>
+                    <th>Email Address</th>
+                    <th>System Role</th>
+                    <th>Associated Profile</th>
+                    <th>Created At</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                  <tr><td colspan="7" class="text-center py-4 text-muted">Loading users...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Add / Edit User Modal -->
+  <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalTitle"><i class="fas fa-user-shield me-2 text-success"></i>Create System User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="userForm" onsubmit="saveUser(event)">
+          <div class="modal-body">
+            <input type="hidden" id="userId">
+            <div class="mb-3">
+              <label for="userName" class="form-label small fw-bold">Full Name *</label>
+              <input type="text" class="form-control" id="userName" placeholder="e.g. Agricultural Officer" required>
+            </div>
+            <div class="mb-3">
+              <label for="userEmail" class="form-label small fw-bold">Email Address *</label>
+              <input type="email" class="form-control" id="userEmail" placeholder="officer@agritech.com" required>
+            </div>
+            <div class="mb-3">
+              <label for="userPassword" class="form-label small fw-bold" id="userPasswordLabel">Password *</label>
+              <input type="password" class="form-control" id="userPassword" placeholder="Minimum 6 characters">
+              <div class="form-text" id="userPasswordHelp">Required for new users; leave empty if not changing.</div>
+            </div>
+            <div class="mb-3">
+              <label for="userRole" class="form-label small fw-bold">Access Role *</label>
+              <select class="form-select" id="userRole" required>
+                <option value="farmer">Farmer / Standard User</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-agri-primary" id="saveUserBtn">Save Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/users.js"></script>
+</body>
+</html>

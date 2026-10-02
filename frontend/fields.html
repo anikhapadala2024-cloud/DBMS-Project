@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fields Management - AgriTech Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <div id="app-sidebar-container"></div>
+    <div class="app-main">
+      <div id="app-topbar-container"></div>
+
+      <main class="page-content">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Field Holdings Management</h1>
+            <p class="page-subtitle">Track agricultural plots, soil profiles, acreage, and assigned cultivators</p>
+          </div>
+          <div>
+            <button class="btn btn-agri-primary" data-role="admin" onclick="openAddFieldModal()">
+              <i class="fas fa-plus-circle"></i>Add New Field
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+          <div class="flex-grow-1" style="min-width: 250px;">
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+              <input type="text" id="fieldSearchInput" class="form-control border-start-0 ps-0" placeholder="Search by field name, farmer, soil type, location..." oninput="handleFieldSearch()">
+            </div>
+          </div>
+          <div style="min-width: 200px;">
+            <select class="form-select filter-input" id="farmerFilterSelect" onchange="loadFields()">
+              <option value="">All Farmers</option>
+            </select>
+          </div>
+          <button class="btn btn-agri-outline" onclick="loadFields()">
+            <i class="fas fa-sync-alt"></i>Refresh
+          </button>
+        </div>
+
+        <!-- Fields Data Table -->
+        <div class="agri-card">
+          <div class="agri-card-body p-0">
+            <div class="table-responsive-custom">
+              <table class="table-custom">
+                <thead>
+                  <tr>
+                    <th># ID</th>
+                    <th>Field Name</th>
+                    <th>Associated Farmer</th>
+                    <th>Location / Zone</th>
+                    <th>Area (Acres)</th>
+                    <th>Soil Type</th>
+                    <th>Batches Count</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="fieldsTableBody">
+                  <tr><td colspan="8" class="text-center py-4 text-muted">Loading fields...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Add / Edit Field Modal -->
+  <div class="modal fade" id="fieldModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="fieldModalTitle"><i class="fas fa-map-marker-alt me-2 text-success"></i>Add Field Plot</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="fieldForm" onsubmit="saveField(event)">
+          <div class="modal-body">
+            <input type="hidden" id="fieldId">
+            <div class="mb-3">
+              <label for="fieldFarmerId" class="form-label small fw-bold">Farmer Owner *</label>
+              <select class="form-select" id="fieldFarmerId" required>
+                <option value="">Select Farmer...</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="fieldName" class="form-label small fw-bold">Field / Plot Name *</label>
+              <input type="text" class="form-control" id="fieldName" placeholder="e.g. North Meadow - Plot A" required>
+            </div>
+            <div class="mb-3">
+              <label for="fieldLocation" class="form-label small fw-bold">Location / Landmark *</label>
+              <input type="text" class="form-control" id="fieldLocation" placeholder="e.g. North Ridge Sector 1" required>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-sm-6">
+                <label for="fieldArea" class="form-label small fw-bold">Area (Acres) *</label>
+                <input type="number" step="0.01" min="0.1" class="form-control" id="fieldArea" placeholder="e.g. 12.5" required>
+              </div>
+              <div class="col-sm-6">
+                <label for="fieldSoilType" class="form-label small fw-bold">Soil Type *</label>
+                <select class="form-select" id="fieldSoilType" required>
+                  <option value="Alluvial">Alluvial Soil</option>
+                  <option value="Black">Black Soil (Regur)</option>
+                  <option value="Red">Red Soil</option>
+                  <option value="Clay">Clay Soil</option>
+                  <option value="Clay Loam">Clay Loam</option>
+                  <option value="Loamy">Loamy Soil</option>
+                  <option value="Sandy Loam">Sandy Loam</option>
+                  <option value="Laterite">Laterite Soil</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-agri-primary" id="saveFieldBtn">Save Field</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Field Details Modal -->
+  <div class="modal fade" id="fieldDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-map me-2 text-success"></i>Field Holdings & Active Crops</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="fieldDetailsBody">
+          <p class="text-center text-muted">Loading field details...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/fields.js"></script>
+</body>
+</html>
